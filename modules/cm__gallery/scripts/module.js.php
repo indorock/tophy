@@ -30,11 +30,12 @@ var Splash = {
 	
 	init : function(){
 		$("#splash img.default").css("left", ($("#splash").innerWidth() - $("#splash-default img.default").width())/2 + "px");
-		if(this.slides.length >0){
+		if(this.slides.length > 0){
 			$(this.slides).each(function(){
 				var img = document.createElement("img");
 				img.src = this.src;
-				$(img).css("left", ($("#splash").innerWidth() - img.width)/2 + "px");
+				$(img).css("max-width", (window.innerWidth-100)+'px');
+				$(img).css("max-height", (window.innerHeight-250)+'px');
 				$("#splash").append(img);
 				if(img.height > Splash.max_height)
 					Splash.max_height = img.height;

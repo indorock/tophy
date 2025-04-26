@@ -84,6 +84,12 @@ div#footer a:hover{text-decoration:underline;}
 /* SPLASH PAGE */
 div#splash{height:400px; text-align:center; margin:20px auto;}
 div#splash-default{position:absolute; width:<?php echo $_SESSION['container_width']; ?>; height:400px; text-align:center; margin:20px auto;}
+div#splash{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+
 
 /* PAGE */
 div.intro{width:80%;margin:10px auto;text-align:center;}
