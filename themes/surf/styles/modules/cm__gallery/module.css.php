@@ -213,11 +213,9 @@ body.display_thumbnails div.pagecontainer div.next{
 #TB_overlay {
 	position: fixed;
 	z-index:100;
-	top: 0px;
-	left:50%;
-	width:1000px ! important;
+	top: 100px;
+	width:100% ! important;
 	height:100%;
-	margin-left:-500px;
 	margin-top:0px;
 	filter:alpha(opacity=100);
 	-moz-opacity: 1;
@@ -226,7 +224,7 @@ body.display_thumbnails div.pagecontainer div.next{
 
 #TB_overlay_inner{
 	background:#fff url("<?php echo $_SESSION['webpath'] ?>images/bg.png");
-	width:1000px;
+	width:100%;
 	height:100%;
 	margin:-13px auto 0 auto;
 }
@@ -325,6 +323,7 @@ body.display_thumbnails div.pagecontainer div.next{
 	position:absolute;
 	width:56px;
 	height:30px;
+	left: 20px ! important;
 	filter:alpha(opacity=50);
 	-moz-opacity: 0.5;
 	opacity: 0.5;
@@ -336,6 +335,7 @@ body.display_thumbnails div.pagecontainer div.next{
 	position:absolute;
 	height:30px;
 	width:56px;
+	right: 20px ! important;
 	filter:alpha(opacity=50);
 	-moz-opacity: 0.5;
 	opacity: 0.5;
@@ -375,15 +375,14 @@ body.display_thumbnails div.exif_info_column{float:left;background-color:#444;he
 body.display_thumbnails div.exif_info_column div.left_column{height:15px;width:40%;line-height:15px;float:left; background-color:#222;text-align:right;overflow:hidden;}
 body.display_thumbnails div.exif_info_column div.right_column{width:60%;line-height:15px;float:left;overflow:hidden;}
 body.display_thumbnails div.exif_info_column div span{padding:0 5px;display:inline-block}
-body.display_thumbnails div.nav_buttons{width:950px;margin:40px auto;height:40px;}
+body.display_thumbnails div.nav_buttons{width:95%;margin:40px auto;height:40px;}
 
 body.display_thumbnails .gallery_navlink{
 	filter:alpha(opacity=100);
 	-moz-opacity: 1;
 	opacity: 1;
 	float:left;
-	width:475px ! important;
-	position:relative ! important;
+	width:100px ! important;
 	z-index:10;
 }
 

@@ -117,8 +117,8 @@ function get_html_template($template_name, $module){
 function replace_template_placeholders($template_html, $item_content){
 	$output = $template_html;
 	foreach($item_content as $data){
-		$output = str_replace("{{" . key($item_content) . "}}", $data, $output);		
-		next($item_content);
+		$output = str_replace("{{" . key($item_content) . "}}", $data ?? '', $output);		
+		next($item_content);	
 	}
 	return $output;
 }

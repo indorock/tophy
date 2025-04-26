@@ -8,46 +8,47 @@
 /* description:											*/
 /********************************************************/
 
-require(COREBASEPATH . "models/xmlfile.class.php");
-include COREBASEPATH . "helpers/xml_functions.php";
-
 set_time_limit(120);
 date_default_timezone_set('Europe/Amsterdam');
 
 class Config{
-    $xml_folder = 'xml/';
-    $config_xmlfile = ROOTFILEPATH . $xml_folder . 'tophy_config.xml';
-    $current_webpath = $_SERVER['REQUEST_URI'];
-    $alias_node = null;
-    $webpath;
+    public $xml_folder = 'xml/';
+    public $config_xmlfile;
+    public $current_webpath;
+    public $alias_node;
+    public $webpath = '/';
+    public $system_pathnames = [];
+    public $module_config_include_files = [];
+    public $module_content_include_files = [];
 
-    if(substr($current_webpath, strlen($current_webpath)-1) != "/"){
-        $current_webpath .= "/";
+    function __construct(){
+        $this->current_webpath = $_SERVER['REQUEST_URI'];
+        if(substr($this->current_webpath, strlen($this->current_webpath)-1) != "/"){
+            $this->current_webpath .= "/";
+        }
+    
+        if(strpos($_SERVER['REQUEST_URI'], "?") > 0){
+            $this->current_webpath = substr($_SERVER['REQUEST_URI'], 0 ,strpos($_SERVER['REQUEST_URI'], "?"));
+        }
+    
+        /* DETERMINE SERVER PLATFORM */
+        if(stristr($_SERVER['SERVER_SOFTWARE'], "win32") || stristr($_SERVER['SERVER_SOFTWARE'], "win64")){
+            $server_OS = "win";
+        }else{
+            $server_OS = "nix";
+        }    
+        $this->config_xmlfile = ROOTFILEPATH . $this->xml_folder . 'tophy_config.xml';
+        $this->system_pathnames = [
+            'scripts' => 'scripts',
+            'images' => 'images',
+            'themes' => 'themes',
+            'modules' => 'modules',
+            'default_theme' => '__default',
+            'transparent_img' => $this->webpath . 'images/global/t.png'
+        ];    
     }
-
-    if(strpos($_SERVER['REQUEST_URI'], "?") > 0){
-        $current_webpath = substr($_SERVER['REQUEST_URI'], 0 ,strpos($_SERVER['REQUEST_URI'], "?"));
-    }
-
-	/* DETERMINE SERVER PLATFORM */
-	if(stristr($_SERVER['SERVER_SOFTWARE'], "win32") || stristr($_SERVER['SERVER_SOFTWARE'], "win64")){
-		$server_OS = "win";
-	}else{
-		$server_OS = "nix";
-	}
-
-    $system_pathnames = [
-        'scripts' => 'scripts',
-        'images' => 'images',
-        'themes' => 'themes',
-        'modules' => 'modules',
-        'default_theme' => '__default',
-        'transparent_img' => $webpath . 'images/global/t.png';
-    ];
-
 
     function load_global_config(){
-
 
         /* OPEN TOPHY CONFIG XML */
         $config_global = new XmlFile(realpath($config_xmlfile));
@@ -212,8 +213,6 @@ class Config{
         $homepage_module = '';
         $modules_enabled = array();
         $module_paths = array();
-        $module_config_include_files = [];
-        $module_content_include_files = [];
 
         foreach($modules as $module){
             $name = getElementValue($module, "name", 0, "");
@@ -241,7 +240,7 @@ class Config{
                 $config_include_file = MODULESBASEPATH . $name . '/models/module_config.php';
                 $content_include_file = MODULESBASEPATH . $name . '/models/module.php';
                 if(file_exists($config_include_file)){
-                    $module_config_include_files[count($module_config_include_files)] = $config_include_file;
+                    $this->module_config_include_files[count($this->module_config_include_files)] = $config_include_file;
                 }
                 if(file_exists($content_include_file)){
                     $_SESSION['module_content_include_files'][count($_SESSION['module_content_include_files'])] = $content_include_file;
@@ -262,8 +261,6 @@ class Config{
             $_SESSION['quicklinks']['items'][$x]['img'] = getElementValue($itemnode, "img", 0, "");
         }
         /***********************************/
-
-
     }
 
 }
@@ -274,8 +271,8 @@ if(filectime($config_xmlfile) != @$_SESSION['config_xmlfile_time'] || filesize($
 }
 if(isset($_GET["theme"])) $_SESSION['theme'] = $_GET["theme"];
 
-foreach(Config->$module_config_include_files as $config_include_file){
+$config = new Config();
+
+foreach($config->module_config_include_files as $config_include_file){
     include $config_include_file;
  }
-
-
